@@ -10,7 +10,7 @@ public class StringProcessor {
         }
     }
 
-    public static String countEntry(String text, String sub) {
+    public static int countEntry(String text, String sub) {
         int count = 0;
         if (sub.isEmpty()) throw new IllegalArgumentException("String is empty");
         for (int i = 0; i <= text.length() - sub.length(); i++) {
@@ -18,12 +18,12 @@ public class StringProcessor {
             return count;
         }
     }
-    public static String replaceNumbers(String s) {
-        String sOut;
-        sOut = s.replace("1", "один")
+    public static String replaceNumbers (String s) {
+        String str;
+        str = s.replace("1", "один")
                 .replace("2", "два")
                 .replace("3", "три");
-        return s;
+        return str;
     }
 
     public static StringBuilder stringDel(StringBuilder sb) {

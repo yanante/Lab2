@@ -16,7 +16,7 @@ public class FinanceReport {
     public FinanceReport(){
         this.payments=new Payment[]{};
         this.name="none";
-        this.date="01.01.2000"
+        this.date="01.01.2000";
     }
 
     public FinanceReport(FinanceReport finrep) {

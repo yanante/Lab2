@@ -1,68 +1,44 @@
-package org.example;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.example.money;
 
 public class FinanceReportProcessor {
-
-    // Get the payment with the maximum amount
-    public static Payment getMaxPayment(FinanceReport report) {
-        if (report == null || report.getPayments().length == 0) {
-            throw new IllegalArgumentException("The finance report cannot be null or empty");
-        }
-
-        Payment maxPayment = report.getPayments()[0];
-        for (Payment payment : report.getPayments()) {
-            if (payment.getAmountInCents() > maxPayment.getAmountInCents()) {
-                maxPayment = payment;
+    public static FinanceReport getSecondNamesForFirstChar(FinanceReport report, char someChars) {
+        int j = 0;
+        for (int i = 0; i < report.getAmountPayments(); i++) {
+            if (report.getPayment(i).getFio().charAt(0) == someChars) {
+                j++;
             }
         }
-        return maxPayment;
-    }
-
-    // Get the payment with the minimum amount
-    public static Payment getMinPayment(FinanceReport report) {
-        if (report == null || report.getPayments().length == 0) {
-            throw new IllegalArgumentException("The finance report cannot be null or empty");
-        }
-
-        Payment minPayment = report.getPayments()[0];
-        for (Payment payment : report.getPayments()) {
-            if (payment.getAmountInCents() < minPayment.getAmountInCents()) {
-                minPayment = payment;
+        Payment[] payments = new Payment[j];
+        int index = 0;
+        for (int i = 0; i < report.getAmountPayments(); i++) {
+            if (report.getPayment(i).getFio().charAt(0) == someChars) {
+                payments[index] = report.getPayment(i);
+                index++;
             }
         }
-        return minPayment;
+        return new FinanceReport(payments, report.getName(), report.getDate());
     }
 
-    // Calculate the total sum of all payments
-    public static long getTotalAmountInCents(FinanceReport report) {
-        if (report == null) {
-            throw new IllegalArgumentException("The finance report cannot be null");
-        }
+    // ArrayList
+    // два раза пройтись циклом подсчитать количество и создать массив фиксированного размера
 
-        long total = 0;
-        for (Payment payment : report.getPayments()) {
-            total += payment.getAmountInCents();
-        }
-        return total;
-    }
 
-    // Find all payments made to a specific recipient
-    public static List<Payment> findPaymentsByRecipient(FinanceReport report, String recipient) {
-        if (report == null) {
-            throw new IllegalArgumentException("The finance report cannot be null");
-        }
-        if (recipient == null || recipient.isEmpty()) {
-            throw new IllegalArgumentException("Recipient name cannot be empty");
-        }
-
-        List<Payment> result = new ArrayList<>();
-        for (Payment payment : report.getPayments()) {
-            if (payment.getRecipient().equalsIgnoreCase(recipient)) {
-                result.add(payment);
+    public static FinanceReport paymentsLessThanASpecifiedNumber(FinanceReport report, int specifiedNumber) {
+        int j = 0;
+        for (int i = 0; i < report.getAmountPayments(); i++) {
+            if (report.getPayment(i).getSumPay() < specifiedNumber) {
+                j++;
             }
         }
-        return result;
+        int index = 0;
+        Payment[] payments = new Payment[j];
+        for (int i = 0; i < report.getAmountPayments(); i++) {
+            if (report.getPayment(i).getSumPay() < specifiedNumber) {
+                payments[index] = report.getPayment(i);
+                index++;
+            }
+        }
+        return new FinanceReport(payments, report.getName(), report.getDate());
     }
+
 }
