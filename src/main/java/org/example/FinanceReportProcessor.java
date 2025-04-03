@@ -1,46 +1,68 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class FinanceReportProcessor {
 
-    // Calculate total amount of all payments in the report
-    public static double calculateTotalAmount(FinanceReport report) {
-        if (report == null) {
-            throw new IllegalArgumentException("Finance report cannot be null");
-        }
-        return report.getTotalAmount();
-    }
-
-    // Find the payment with the highest amount
-    public static Payment findLargestPayment(FinanceReport report) {
-        if (report == null) {
-            throw new IllegalArgumentException("Finance report cannot be null");
-        }
-        Payment[] payments = report.getPayments();
-        if (payments.length == 0) {
-            return null; // No payments in the report
+    // Get the payment with the maximum amount
+    public static Payment getMaxPayment(FinanceReport report) {
+        if (report == null || report.getPayments().length == 0) {
+            throw new IllegalArgumentException("The finance report cannot be null or empty");
         }
 
-        Payment largest = payments[0];
-        for (Payment payment : payments) {
-            if (payment.getAmount() > largest.getAmount()) {
-                largest = payment;
+        Payment maxPayment = report.getPayments()[0];
+        for (Payment payment : report.getPayments()) {
+            if (payment.getAmountInCents() > maxPayment.getAmountInCents()) {
+                maxPayment = payment;
             }
         }
-        return largest;
+        return maxPayment;
     }
 
-    // Generate a summary report as a string
-    public static String generateSummary(FinanceReport report) {
-        if (report == null) {
-            throw new IllegalArgumentException("Finance report cannot be null");
+    // Get the payment with the minimum amount
+    public static Payment getMinPayment(FinanceReport report) {
+        if (report == null || report.getPayments().length == 0) {
+            throw new IllegalArgumentException("The finance report cannot be null or empty");
         }
-        return "Finance Report Summary:\n" +
-                "Owner: " + report.getOwner() + "\n" +
-                "Total Amount: " + calculateTotalAmount(report) + "\n" +
-                "Largest Payment: " + findLargestPayment(report());
+
+        Payment minPayment = report.getPayments()[0];
+        for (Payment payment : report.getPayments()) {
+            if (payment.getAmountInCents() < minPayment.getAmountInCents()) {
+                minPayment = payment;
+            }
+        }
+        return minPayment;
     }
 
-    private static FinanceReport report() {
-        return null;
+    // Calculate the total sum of all payments
+    public static long getTotalAmountInCents(FinanceReport report) {
+        if (report == null) {
+            throw new IllegalArgumentException("The finance report cannot be null");
+        }
+
+        long total = 0;
+        for (Payment payment : report.getPayments()) {
+            total += payment.getAmountInCents();
+        }
+        return total;
+    }
+
+    // Find all payments made to a specific recipient
+    public static List<Payment> findPaymentsByRecipient(FinanceReport report, String recipient) {
+        if (report == null) {
+            throw new IllegalArgumentException("The finance report cannot be null");
+        }
+        if (recipient == null || recipient.isEmpty()) {
+            throw new IllegalArgumentException("Recipient name cannot be empty");
+        }
+
+        List<Payment> result = new ArrayList<>();
+        for (Payment payment : report.getPayments()) {
+            if (payment.getRecipient().equalsIgnoreCase(recipient)) {
+                result.add(payment);
+            }
+        }
+        return result;
     }
 }

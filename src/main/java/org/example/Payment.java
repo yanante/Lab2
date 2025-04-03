@@ -3,57 +3,66 @@ package org.example;
 import java.util.Objects;
 
 public class Payment {
-    private String recipient;  // Payment recipient
-    private double amount;     // Payment amount
-
-    // Constructor
-    public Payment(String recipient, double amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Payment amount cannot be negative");
-        }
-        this.recipient = recipient;
-        this.amount = amount;
+    private String name;
+    private int day;
+    private int month;
+    private int year;
+    private int bill;
+    public Payment(String name, int day, int month, int year, int bill) {
+        this.name=name;
+        this.day=day;
+        this.month=month;
+        this.year=year;
+        this.bill=bill;
     }
 
-    public String getRecipient() {
-        return recipient;
+    public String getName() {
+        return name;
+    }
+    public int getDay(){
+        return day;
+    }
+    public int getMonth(){
+        return month;
+    }
+    public int getYear(){
+        return year;
+    }
+    public int getBill(){
+        return bill;
+    }
+    public void setName(String name){
+        this.name=name;
+    }
+    public void setDay(int day){
+        this.day=day;
+    }
+    public void setMonth(int month){
+        this.month=month;
+    }
+    public void setYear(int year){
+        this.year=year;
+    }
+    public void setBill(int bill){
+        this.bill=bill;
     }
 
-    public void setRecipient(String recipient) {
-        this.recipient = recipient;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        if (amount < 0) {
-            throw new IllegalArgumentException("Payment amount cannot be negative");
-        }
-        this.amount = amount;
-    }
-
-    // Formatted output method
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "recipient='" + recipient + '\'' +
-                ", amount=" + amount +
-                '}';
-    }
-
-    // Object comparison method (for testing and correct work with collections)
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Payment payment = (Payment) o;
-        return Double.compare(payment.amount, amount) == 0 && Objects.equals(recipient, payment.recipient);
+        return day==payment.day && month==payment.month && year==payment.year && bill==payment.bill && Objects.equals(name, payment.name);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(recipient, amount);
+    public int hashCode(){
+        return Objects.hash(name,day,month,year,bill);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Плательщик: %s, дата: %s, сумма: %d руб. %02d коп.",
+                name,day,month,year, bill/ 100, bill % 100);
     }
 }

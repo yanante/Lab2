@@ -4,75 +4,67 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class FinanceReport {
-    private String owner;        // Report owner
-    private Payment[] payments;  // Array of payments
+    private final Payment[] payments;
+    private final String name;
+    private final String date;
 
-    // Constructor
-    public FinanceReport(String owner, Payment[] payments) {
-        if (owner == null || owner.isEmpty()) {
-            throw new IllegalArgumentException("Report owner cannot be null or empty");
+    public FinanceReport(Payment[] payments, String name, String date) {
+        this.payments=payments;
+        this.name=name;
+        this.date=date;
+    }
+    public FinanceReport(){
+        this.payments=new Payment[]{};
+        this.name="none";
+        this.date="01.01.2000"
+    }
+
+    public FinanceReport(FinanceReport finrep) {
+        this.name = finrep.name;
+        this.date = finrep.date;
+        this.payments=new Payment[finrep.payments.length];
+        for (int i=0; i<finrep.getAmountPayments(); ++i){
+            payments[i]=new Payment(
+                    finrep.getPayment(i).getName(),
+                    finrep.getPayment(i).getDay(),
+                    finrep.getPayment(i).getMonth(),
+                    finrep.getPayment(i).getYear(),
+                    finrep.getPayment(i).getBill());
         }
-        if (payments == null) {
-            throw new IllegalArgumentException("Payments array cannot be null");
-        }
-        this.owner = owner;
-        this.payments = Arrays.copyOf(payments, payments.length); // Defensive copy
+    }
+    public int getAmountPayments(){
+        return payments.length;
     }
 
-    // Getters
-    public String getOwner() {
-        return owner;
+    public Payment getPayment(int n){
+        return payments[n];
     }
 
-    public Payment[] getPayments() {
-        return Arrays.copyOf(payments, payments.length); // Returning a copy to protect encapsulation
+    public void setPayment(int n,Payment payment){
+        payments[n]=payment;
     }
 
-    // Setters
-    public void setOwner(String owner) {
-        if (owner == null || owner.isEmpty()) {
-            throw new IllegalArgumentException("Report owner cannot be null or empty");
-        }
-        this.owner = owner;
-    }
-
-    public void setPayments(Payment[] payments) {
-        if (payments == null) {
-            throw new IllegalArgumentException("Payments array cannot be null");
-        }
-        this.payments = Arrays.copyOf(payments, payments.length);
-    }
-
-    // Get total sum of all payments
-    public double getTotalAmount() {
-        double total = 0;
-        for (Payment payment : payments) {
-            total += payment.getAmount();
-        }
-        return total;
-    }
-
-    // Formatted output
     @Override
     public String toString() {
-        return "FinanceReport{" +
-                "owner='" + owner + '\'' +
-                ", payments=" + Arrays.toString(payments) +
-                '}';
+        StringBuilder pay = new StringBuilder();
+        for (Payment payment : payments) {
+            if (payment == null) break;
+            pay.append(payment).append(System.lineSeparator());
+        }
+        return String.format("[Автор: %s,дата: %s. Платежи:[\n%s]]",name,date,pay);
     }
 
-    // Object comparison
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FinanceReport that = (FinanceReport) o;
-        return Objects.equals(owner, that.owner) && Arrays.equals(payments, that.payments);
+        return Objects.equals(name, that.name) && Arrays.equals(payments, that.payments);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(owner);
+        int result = Objects.hash(name,date);
         result = 31 * result + Arrays.hashCode(payments);
         return result;
     }
